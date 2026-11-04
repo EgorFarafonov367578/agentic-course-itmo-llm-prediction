@@ -1,0 +1,40 @@
+{
+  "version": "castillo-batched-v1",
+  "params": {
+    "seed": 20261104,
+    "max_rows": 500,
+    "max_chars": 400000
+  },
+  "splits": {
+    "train": {
+      "rows": 83952,
+      "batches": 174,
+      "rows_per_batch": {
+        "min": 241,
+        "max": 500
+      },
+      "max_input_chars": 399994,
+      "file_sha256": "e358940c831a3574879addfb33e96e4eae54afc5c3b89770cedefc903a991020"
+    },
+    "public": {
+      "rows": 27943,
+      "batches": 61,
+      "rows_per_batch": {
+        "min": 222,
+        "max": 500
+      },
+      "max_input_chars": 399931,
+      "file_sha256": "69d61957afa1672312bf9dce410a83888d56e613d1a65ad27e35bab570a7a150"
+    },
+    "private": {
+      "rows": 27948,
+      "batches": 61,
+      "rows_per_batch": {
+        "min": 386,
+        "max": 500
+      },
+      "max_input_chars": 399998,
+      "file_sha256": "efcda80f8a73d4833bfb06f330b9b24efd1e56754c542819e7aa032264cf823a"
+    }
+  }
+}
