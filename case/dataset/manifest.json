@@ -1,0 +1,80 @@
+{
+  "version": "castillo-sanitized-family-split-v1",
+  "source": {
+    "dataset": "https://huggingface.co/datasets/danfperam/castillo",
+    "revision": "fb93f412e6bed3f3b834f0ded23e0865c286ed6c",
+    "license": "CC BY 4.0",
+    "files": {
+      "sanitized/sanitized_train.json": "116f885020cee150efd34afc2dae643deea939b0b4d33410c00ed558edbd0a71",
+      "sanitized/sanitized_validate.json": "001c754a3af7183e8806d368ccd953fdbcbe9d051b4f9b1b804962620652cb29",
+      "sanitized/sanitized_test.json": "9cd048110076a22693f73e4813bae21a66bfb366b93cfc2641566896fe196726"
+    }
+  },
+  "params": {
+    "split_seed": 20261104,
+    "fractions": {
+      "train": 0.6,
+      "public": 0.2,
+      "private": 0.2
+    },
+    "min_outputs": 5,
+    "shingle_words": 5,
+    "jaccard": 0.3,
+    "max_df": 1000
+  },
+  "dropped_rows_min_outputs": 29,
+  "family_count": 10013,
+  "multi_prompt_families": 523,
+  "largest_family": 85,
+  "splits": {
+    "train": {
+      "rows": 83952,
+      "prompts": 6836,
+      "families": 5805,
+      "rows_by_source": {
+        "Alpaca": 14979,
+        "Apps": 14604,
+        "BigCodeBench": 8639,
+        "DS1000": 7603,
+        "DollyDataset": 15581,
+        "Mbpp": 7629,
+        "ShareGPT": 14917
+      },
+      "prompt_ids_sha256": "dc4020fb8a7f26f02dd2f566c9697a3ab65d3535b57d9adf937af9a9c31172ce",
+      "file_sha256": "0cfa96512406a0c22e1c9a56c36665322c5ffd4a991396200a9b1957bae9beaa"
+    },
+    "public": {
+      "rows": 27943,
+      "prompts": 2265,
+      "families": 2111,
+      "rows_by_source": {
+        "Alpaca": 5005,
+        "Apps": 4867,
+        "BigCodeBench": 2882,
+        "DS1000": 2523,
+        "DollyDataset": 5184,
+        "Mbpp": 2509,
+        "ShareGPT": 4973
+      },
+      "prompt_ids_sha256": "2219f7b075edb8e2df343831db9e0e5f0bd0a866f112ddaa8f86cbe628233b3c",
+      "file_sha256": "ccaa03b435c346c3c6107235aec2672def30097df9311c3e44ac35f8cdff7c2f"
+    },
+    "private": {
+      "rows": 27948,
+      "prompts": 2294,
+      "families": 2097,
+      "rows_by_source": {
+        "Alpaca": 4993,
+        "Apps": 4863,
+        "BigCodeBench": 2887,
+        "DS1000": 2524,
+        "DollyDataset": 5185,
+        "Mbpp": 2521,
+        "ShareGPT": 4975
+      },
+      "prompt_ids_sha256": "96fdcb9bef29d312a235645313410cdcb91e28e43e24deb0d769da17ec1642ae",
+      "file_sha256": "94e669b2192bf269c0ab2bf545abeea6774f1fd12cb26cf36fcc2292ba9dc4c2"
+    }
+  },
+  "closed_data_in_git": false
+}

@@ -2,3 +2,6 @@ __pycache__/
 # private и public держит оценщик, не коммитить
 *.private.jsonl
 *.public.jsonl
+# сырые файлы CASTILLO и собранные split'ы восстанавливаются через case/dataset/generate.py
+case/dataset/raw/
+case/dataset/data/

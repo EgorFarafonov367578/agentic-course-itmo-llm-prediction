@@ -5,7 +5,7 @@
 > Шаблон репозитория для задания B. ТЗ: [B-arena-skill.md](https://github.com/deeppavlov/agentic-course-itmo/blob/main/projects/B-arena-skill.md), реестр тем: [arena-registry.md](https://github.com/deeppavlov/agentic-course-itmo/blob/main/projects/arena-registry.md).
 > Замени всё в `<угловых скобках>`, удали этот блок.
 
-Тема: <AR-xx или своя (согласована с kudep, дата)>
+Тема: AR-09
 
 ## Итог в одной таблице
 
