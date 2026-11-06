@@ -1,5 +1,5 @@
 {
-  "version": "castillo-sanitized-family-split-v1",
+  "version": "castillo-sanitized-family-split-v2",
   "source": {
     "dataset": "https://huggingface.co/datasets/danfperam/castillo",
     "revision": "fb93f412e6bed3f3b834f0ded23e0865c286ed6c",
@@ -22,47 +22,48 @@
     "jaccard": 0.3,
     "max_df": 1000
   },
+  "merged_repeated_sample_ids": 207,
   "dropped_rows_min_outputs": 29,
   "family_count": 10013,
   "multi_prompt_families": 523,
   "largest_family": 85,
   "splits": {
     "train": {
-      "rows": 83952,
-      "prompts": 6836,
-      "families": 5805,
+      "rows": 83813,
+      "prompts": 6875,
+      "families": 5814,
       "rows_by_source": {
         "Alpaca": 14979,
         "Apps": 14604,
         "BigCodeBench": 8639,
-        "DS1000": 7603,
-        "DollyDataset": 15581,
+        "DS1000": 7592,
+        "DollyDataset": 15569,
         "Mbpp": 7629,
-        "ShareGPT": 14917
+        "ShareGPT": 14801
       },
-      "prompt_ids_sha256": "dc4020fb8a7f26f02dd2f566c9697a3ab65d3535b57d9adf937af9a9c31172ce",
-      "file_sha256": "0cfa96512406a0c22e1c9a56c36665322c5ffd4a991396200a9b1957bae9beaa"
+      "prompt_ids_sha256": "4aa5c45540c5e9458da8ccd647240dcb4b4bd74b0ab4db2dc21de3555a607ef8",
+      "file_sha256": "d4a766f54a3e9db9c2f0d53a6d475f0b1fc84d19b39e62b0c3ad94b7f51bafe2"
     },
     "public": {
-      "rows": 27943,
-      "prompts": 2265,
-      "families": 2111,
+      "rows": 27905,
+      "prompts": 2267,
+      "families": 2108,
       "rows_by_source": {
         "Alpaca": 5005,
         "Apps": 4867,
         "BigCodeBench": 2882,
-        "DS1000": 2523,
-        "DollyDataset": 5184,
+        "DS1000": 2522,
+        "DollyDataset": 5183,
         "Mbpp": 2509,
-        "ShareGPT": 4973
+        "ShareGPT": 4937
       },
-      "prompt_ids_sha256": "2219f7b075edb8e2df343831db9e0e5f0bd0a866f112ddaa8f86cbe628233b3c",
-      "file_sha256": "ccaa03b435c346c3c6107235aec2672def30097df9311c3e44ac35f8cdff7c2f"
+      "prompt_ids_sha256": "1b84ca7c0ceae993ac51a8eb08bf7638cab5d95ea2a9ee134d9786110803e0e9",
+      "file_sha256": "1f0164d0cf50ed30e3c7b1c04162d1b2d5331f4fa0e8ea53ae70b0a2b5d533dd"
     },
     "private": {
-      "rows": 27948,
-      "prompts": 2294,
-      "families": 2097,
+      "rows": 27906,
+      "prompts": 2253,
+      "families": 2091,
       "rows_by_source": {
         "Alpaca": 4993,
         "Apps": 4863,
@@ -70,10 +71,10 @@
         "DS1000": 2524,
         "DollyDataset": 5185,
         "Mbpp": 2521,
-        "ShareGPT": 4975
+        "ShareGPT": 4933
       },
-      "prompt_ids_sha256": "96fdcb9bef29d312a235645313410cdcb91e28e43e24deb0d769da17ec1642ae",
-      "file_sha256": "94e669b2192bf269c0ab2bf545abeea6774f1fd12cb26cf36fcc2292ba9dc4c2"
+      "prompt_ids_sha256": "faed8207e2b1877a57909465cd4f6321b993f35b18441097e361e4dfac2ddf13",
+      "file_sha256": "2c9ae600dada3eeed758fd9c7e28bfb9223fe4b4e3806b85bc515e280f097058"
     }
   },
   "closed_data_in_git": false
