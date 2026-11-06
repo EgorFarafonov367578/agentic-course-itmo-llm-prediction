@@ -14,7 +14,8 @@
    от целевой доли строк;
 5. записать JSONL и manifest.json.
 
-python3 case/dataset/generate.py            # скачивает в case/dataset/raw/, пишет в case/dataset/data/
+python3 case/dataset/generate.py
+    # скачивает в case/dataset/raw/, пишет в case/dataset/data/
 python3 case/dataset/generate.py --raw-dir /path/to/castillo --out-dir /tmp/out
 """
 import argparse
@@ -67,7 +68,10 @@ def load_rows(raw_dir: Path) -> list[dict]:
     return rows
 
 
-REPEAT_KEYS = ("prompt_id", "model", "dataset", "prompt_text", "input_size", "category", "temp", "top_p", "top_k")
+REPEAT_KEYS = (
+    "prompt_id", "model", "dataset", "prompt_text", "input_size",
+    "category", "temp", "top_p", "top_k",
+)
 
 
 def merge_repeats(rows: list[dict]) -> tuple[list[dict], int]:
@@ -82,7 +86,9 @@ def merge_repeats(rows: list[dict]) -> tuple[list[dict], int]:
             merged[r["sample_id"]] = dict(r)
             continue
         if any(first[k] != r[k] for k in REPEAT_KEYS):
-            raise ValueError(f"sample_id {r['sample_id']} repeats with a different prompt or settings")
+            raise ValueError(
+                f"sample_id {r['sample_id']} repeats with a different prompt or settings"
+            )
         first["output_sizes"] = first["output_sizes"] + r["output_sizes"]
         repeated.add(r["sample_id"])
     return list(merged.values()), len(repeated)
@@ -122,7 +128,9 @@ def build_families(prompts: dict[str, str]) -> dict[str, str]:
     return {i: find(i) for i in ids}
 
 
-def assign_splits(family: dict[str, str], source: dict[str, str], rows_per_prompt: dict[str, int]) -> dict[str, str]:
+def assign_splits(
+    family: dict[str, str], source: dict[str, str], rows_per_prompt: dict[str, int]
+) -> dict[str, str]:
     """id семейства -> split. Источник семейства — источник его первого запроса."""
     fam_rows = collections.Counter()
     for pid, fam in family.items():
@@ -131,7 +139,7 @@ def assign_splits(family: dict[str, str], source: dict[str, str], rows_per_promp
     for fam in sorted(fam_rows):
         by_source[source[fam]].append(fam)
     out = {}
-    for src, fams in sorted(by_source.items()):
+    for _src, fams in sorted(by_source.items()):
         fams.sort(key=lambda f: hashlib.sha256(f"{SPLIT_SEED}:{f}".encode()).hexdigest())
         filled = dict.fromkeys(FRACTIONS, 0)
         for fam in fams:
@@ -173,7 +181,9 @@ def main() -> None:
     prompts = {r["prompt_id"]: r["prompt_text"] for r in kept}
     source = {r["prompt_id"]: r["dataset"] for r in kept}
     family = build_families(prompts)
-    split_of_family = assign_splits(family, source, collections.Counter(r["prompt_id"] for r in kept))
+    split_of_family = assign_splits(
+        family, source, collections.Counter(r["prompt_id"] for r in kept)
+    )
 
     a.out_dir.mkdir(parents=True, exist_ok=True)
     paths = {s: a.out_dir / f"castillo.{s}.jsonl" for s in FRACTIONS}
@@ -206,7 +216,9 @@ def main() -> None:
         "merged_repeated_sample_ids": repeated_ids,
         "dropped_rows_min_outputs": len(rows) - len(kept),
         "family_count": len(set(family.values())),
-        "multi_prompt_families": sum(1 for c in collections.Counter(family.values()).values() if c > 1),
+        "multi_prompt_families": sum(
+            1 for c in collections.Counter(family.values()).values() if c > 1
+        ),
         "largest_family": max(collections.Counter(family.values()).values()),
         "splits": {
             s: {
@@ -214,14 +226,18 @@ def main() -> None:
                 "prompts": len(split_prompts[s]),
                 "families": len(split_families[s]),
                 "rows_by_source": dict(sorted(stats[s].items())),
-                "prompt_ids_sha256": hashlib.sha256("\n".join(sorted(split_prompts[s])).encode()).hexdigest(),
+                "prompt_ids_sha256": hashlib.sha256(
+                    "\n".join(sorted(split_prompts[s])).encode()
+                ).hexdigest(),
                 "file_sha256": sha256(paths[s]),
             }
             for s in FRACTIONS
         },
         "closed_data_in_git": False,
     }
-    (HERE / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (HERE / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     print(json.dumps({s: manifest["splits"][s]["rows"] for s in FRACTIONS}))
 
 

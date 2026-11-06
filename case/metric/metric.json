@@ -1,10 +1,15 @@
 {
+  "version": "ar09-quantile-v1",
   "kind": "command",
-  "direction": "maximize",
-  "version": "<case>-metric-v1",
+  "direction": "minimize",
   "command": {
     "argv": ["python", "score.py"],
     "uses_model": false,
     "timeout_seconds": 30
+  },
+  "aggregation": {
+    "argv": ["python", "aggregate.py"],
+    "uses_model": false,
+    "timeout_seconds": 120
   }
 }

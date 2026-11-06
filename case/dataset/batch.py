@@ -13,7 +13,8 @@
 Строки перемешиваются хэшем sha256(seed:id), поэтому батч — случайная смесь источников и моделей.
 `meta` в батчи не попадает.
 
-python3 case/dataset/batch.py      # data/castillo.{split}.jsonl -> data/castillo.{split}.batched.jsonl
+python3 case/dataset/batch.py
+    # data/castillo.{split}.jsonl -> data/castillo.{split}.batched.jsonl
 """
 import argparse
 import hashlib
@@ -40,14 +41,21 @@ def to_example(split: str, index: int, records: list[dict]) -> dict:
     return {
         "id": f"{split}-{index:04d}",
         "input": dumps({"rows": [input_row(r) for r in records]}),
-        "reference": dumps({"output_tokens": {r["id"]: r["reference"]["output_tokens"] for r in records}}),
+        "reference": dumps({
+            "output_tokens": {r["id"]: r["reference"]["output_tokens"] for r in records}
+        }),
     }
 
 
-def make_batches(records: list[dict], split: str, *, max_rows: int, max_chars: int, seed: int) -> list[dict]:
+def make_batches(
+    records: list[dict], split: str, *, max_rows: int, max_chars: int, seed: int
+) -> list[dict]:
     if len({r["id"] for r in records}) != len(records):
         raise ValueError("row ids must be unique: reference is keyed by id")
-    ordered = sorted(records, key=lambda r: hashlib.sha256(f"{seed}:{r['id']}".encode()).hexdigest())
+    ordered = sorted(
+        records,
+        key=lambda r: hashlib.sha256(f"{seed}:{r['id']}".encode()).hexdigest(),
+    )
     overhead = len(dumps({"rows": []}))
     batches, current, size = [], [], overhead
     for r in ordered:
@@ -77,7 +85,9 @@ def main() -> None:
     for split in SPLITS:
         src = a.data_dir / f"castillo.{split}.jsonl"
         records = [json.loads(line) for line in open(src, encoding="utf-8")]
-        batches = make_batches(records, split, max_rows=MAX_ROWS, max_chars=MAX_CHARS, seed=BATCH_SEED)
+        batches = make_batches(
+            records, split, max_rows=MAX_ROWS, max_chars=MAX_CHARS, seed=BATCH_SEED
+        )
         dst = a.data_dir / f"castillo.{split}.batched.jsonl"
         with open(dst, "w", encoding="utf-8") as f:
             for b in batches:
@@ -96,7 +106,9 @@ def main() -> None:
         "params": {"seed": BATCH_SEED, "max_rows": MAX_ROWS, "max_chars": MAX_CHARS},
         "splits": summary,
     }
-    (HERE / "batches.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (HERE / "batches.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     print(json.dumps({s: summary[s]["batches"] for s in SPLITS}))
 
 
