@@ -52,6 +52,11 @@ def test_row_larger_than_limit_is_an_error():
         make_batches([record(0, prompt="x" * 1000)], "public", max_rows=10, max_chars=500, seed=1)
 
 
+def test_duplicate_row_id_is_an_error():
+    with pytest.raises(ValueError):
+        make_batches([record(1), record(2), record(1)], "public", max_rows=10, max_chars=10_000, seed=1)
+
+
 def test_input_hides_reference_and_meta():
     batches = make_batches([record(i) for i in range(3)], "public", max_rows=5, max_chars=10_000, seed=1)
     row = json.loads(batches[0]["input"])["rows"][0]

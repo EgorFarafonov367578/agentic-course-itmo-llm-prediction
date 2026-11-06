@@ -1,5 +1,5 @@
 {
-  "version": "castillo-batched-v1",
+  "version": "castillo-batched-v2",
   "params": {
     "seed": 20261104,
     "max_rows": 500,
@@ -7,34 +7,34 @@
   },
   "splits": {
     "train": {
-      "rows": 83952,
-      "batches": 174,
+      "rows": 83813,
+      "batches": 175,
       "rows_per_batch": {
-        "min": 241,
+        "min": 370,
         "max": 500
       },
-      "max_input_chars": 399994,
-      "file_sha256": "e358940c831a3574879addfb33e96e4eae54afc5c3b89770cedefc903a991020"
+      "max_input_chars": 399997,
+      "file_sha256": "f886d47a642a98e1ea7e138b66e51ca63ce5ac9db09bf7896e5b53618a135775"
     },
     "public": {
-      "rows": 27943,
-      "batches": 61,
+      "rows": 27905,
+      "batches": 60,
       "rows_per_batch": {
-        "min": 222,
+        "min": 340,
         "max": 500
       },
-      "max_input_chars": 399931,
-      "file_sha256": "69d61957afa1672312bf9dce410a83888d56e613d1a65ad27e35bab570a7a150"
+      "max_input_chars": 399964,
+      "file_sha256": "4e4e03087c8d167acbc8eb0834902218e3c20f52e2397064071e8d9a4a324d8b"
     },
     "private": {
-      "rows": 27948,
-      "batches": 61,
+      "rows": 27906,
+      "batches": 59,
       "rows_per_batch": {
-        "min": 386,
+        "min": 416,
         "max": 500
       },
-      "max_input_chars": 399998,
-      "file_sha256": "efcda80f8a73d4833bfb06f330b9b24efd1e56754c542819e7aa032264cf823a"
+      "max_input_chars": 399973,
+      "file_sha256": "2fde90f8158b58694291f198d7f23b1c40f14da2cffe6775123d99751977f66b"
     }
   }
 }

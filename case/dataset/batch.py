@@ -45,6 +45,8 @@ def to_example(split: str, index: int, records: list[dict]) -> dict:
 
 
 def make_batches(records: list[dict], split: str, *, max_rows: int, max_chars: int, seed: int) -> list[dict]:
+    if len({r["id"] for r in records}) != len(records):
+        raise ValueError("row ids must be unique: reference is keyed by id")
     ordered = sorted(records, key=lambda r: hashlib.sha256(f"{seed}:{r['id']}".encode()).hexdigest())
     overhead = len(dumps({"rows": []}))
     batches, current, size = [], [], overhead
@@ -90,7 +92,7 @@ def main() -> None:
         }
 
     manifest = {
-        "version": "castillo-batched-v1",
+        "version": "castillo-batched-v2",
         "params": {"seed": BATCH_SEED, "max_rows": MAX_ROWS, "max_chars": MAX_CHARS},
         "splits": summary,
     }

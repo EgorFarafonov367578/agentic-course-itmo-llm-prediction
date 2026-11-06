@@ -6,12 +6,13 @@
 
 Шаги:
 1. скачать три файла `sanitized/*.json` (родной split CASTILLO не используется);
-2. собрать семейства похожих запросов: кандидаты — пары с общим редким словесным шинглом
+2. склеить повторы одного sample_id (одна пара «запрос × модель» сгенерирована в нескольких файлах);
+3. собрать семейства похожих запросов: кандидаты — пары с общим редким словесным шинглом
    (инвертированный индекс), точная проверка Jaccard, связные компоненты через union-find;
-3. разложить семейства по train / public / private: внутри каждого источника запросов семейства
+4. разложить семейства по train / public / private: внутри каждого источника запросов семейства
    перемешиваются по хэшу (сид + id семейства) и жадно отдаются split'у, сильнее всего отстающему
    от целевой доли строк;
-4. записать JSONL и manifest.json.
+5. записать JSONL и manifest.json.
 
 python3 case/dataset/generate.py            # скачивает в case/dataset/raw/, пишет в case/dataset/data/
 python3 case/dataset/generate.py --raw-dir /path/to/castillo --out-dir /tmp/out
@@ -64,6 +65,27 @@ def load_rows(raw_dir: Path) -> list[dict]:
     for name in RAW_FILES:
         rows += json.load(open(raw_dir / name, encoding="utf-8"))
     return rows
+
+
+REPEAT_KEYS = ("prompt_id", "model", "dataset", "prompt_text", "input_size", "category", "temp", "top_p", "top_k")
+
+
+def merge_repeats(rows: list[dict]) -> tuple[list[dict], int]:
+    """Склеивает строки с одним sample_id: в CASTILLO ~200 пар «запрос × модель» сгенерированы
+    повторно в разных файлах. Запрос и параметры совпадают, поэтому длины ответов объединяются
+    в одну выборку. Возвращает строки в порядке первого появления и число склеенных id."""
+    merged: dict[str, dict] = {}
+    repeated = set()
+    for r in rows:
+        first = merged.get(r["sample_id"])
+        if first is None:
+            merged[r["sample_id"]] = dict(r)
+            continue
+        if any(first[k] != r[k] for k in REPEAT_KEYS):
+            raise ValueError(f"sample_id {r['sample_id']} repeats with a different prompt or settings")
+        first["output_sizes"] = first["output_sizes"] + r["output_sizes"]
+        repeated.add(r["sample_id"])
+    return list(merged.values()), len(repeated)
 
 
 def shingles(text: str) -> set[str]:
@@ -146,7 +168,7 @@ def main() -> None:
     a = p.parse_args()
 
     download(a.raw_dir)
-    rows = load_rows(a.raw_dir)
+    rows, repeated_ids = merge_repeats(load_rows(a.raw_dir))
     kept = [r for r in rows if len(r["output_sizes"]) >= MIN_OUTPUTS]
     prompts = {r["prompt_id"]: r["prompt_text"] for r in kept}
     source = {r["prompt_id"]: r["dataset"] for r in kept}
@@ -170,7 +192,7 @@ def main() -> None:
         f.close()
 
     manifest = {
-        "version": "castillo-sanitized-family-split-v1",
+        "version": "castillo-sanitized-family-split-v2",
         "source": {
             "dataset": f"https://huggingface.co/datasets/{REPO}",
             "revision": REVISION,
@@ -181,6 +203,7 @@ def main() -> None:
             "split_seed": SPLIT_SEED, "fractions": FRACTIONS, "min_outputs": MIN_OUTPUTS,
             "shingle_words": SHINGLE, "jaccard": JACCARD, "max_df": MAX_DF,
         },
+        "merged_repeated_sample_ids": repeated_ids,
         "dropped_rows_min_outputs": len(rows) - len(kept),
         "family_count": len(set(family.values())),
         "multi_prompt_families": sum(1 for c in collections.Counter(family.values()).values() if c > 1),
